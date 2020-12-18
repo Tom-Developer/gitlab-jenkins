@@ -1,3 +1,20 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - gitLabApiTokenImpl:
+          # GitLab authentication token must be passed in to "docker run" command as "--env" parameter
+          apiToken: ${GITLAB_AUTH_TOKEN}
+          description: "gitlab.com token"
+          id: "0306e234-40d6-437d-bbaa-98a5df928e16"
+          scope: GLOBAL
+      - usernamePassword:
+          description: "simple-java-maven-app-pipeline creds"
+          id: "1bff0162-c849-49d9-a177-91ef533bcedd"
+          # GitLab authentication token must be passed in to "docker run" command as "--env" parameter
+          password: ${GITLAB_AUTH_TOKEN}
+          scope: GLOBAL
+          username: "tom-dev"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -6,7 +23,7 @@ jenkins:
   authorizationStrategy: "loggedInUsersCanDoAnything"
   crumbIssuer:
     standard:
-      excludeClientIPFromCrumb: false
+      excludeClientIPFromCrumb: true
   disableRememberMe: false
 # must be done as administrator user; so first create one
   disabledAdministrativeMonitors:
@@ -31,7 +48,6 @@ jenkins:
       allowsSignup: false
       enableCaptcha: false
       users:
-#      - id: "admin"
       - id: ${JENKINS_ADMIN_ID:-admin}
         name: ${JENKINS_ADMIN_ID:-admin}
         password: ${JENKINS_ADMIN_PASS:-admin}
@@ -40,7 +56,7 @@ jenkins:
 #        - "myView"  #if left like this throws exception. needs extra data
         - preferredProvider:
             providerId: "default"
-        - timezone: 
+        - timezone:
             timeZoneName: "America/Toronto"
         - mailer:
             emailAddress: "admin@nowhere.cm"
@@ -84,18 +100,27 @@ unclassified:
     defaultTriggerIds:
     - "hudson.plugins.emailext.plugins.trigger.FailureTrigger"
     mailAccount:
-      smtpPassword: "{AQAAABAAAAAQE/81EJhFRH2KnQWddyNf76QM4fs8c29z/BR4G/YpT3c=}"
+      smtpPassword: "{AQAAABAAAABAOVXd6apY43sDTrAvKZQRrqGD5GLhMLT+t4ZCXV+/chGDEpsCq5VXGE/5J9W13Lcyzf+J0V+AeybId3USJoR6QFcJSjrpNx6qnFZb1tiwZq4=}"
     maxAttachmentSize: -1
     maxAttachmentSizeMb: -1
     precedenceBulk: false
     watchingEnabled: false
   fingerprints:
-    fingerprintCleanupDisabled: false
+    fingerprintCleanupDisabled: true
     storage: "file"
   gitHubConfiguration:
     apiRateLimitChecker: ThrottleForNormalize
   gitHubPluginConfig:
     hookUrl: "http://127.0.0.1:8080/github-webhook/"
+  gitLabConnectionConfig:
+    connections:
+    - apiTokenId: "0306e234-40d6-437d-bbaa-98a5df928e16"
+      clientBuilderId: "autodetect"
+      connectionTimeout: 10
+      ignoreCertificateErrors: false
+      name: "gitlab.com"
+      readTimeout: 10
+      url: "https://gitlab.com/"
   gitSCM:
     allowSecondFetch: false
     createAccountBasedOnEmail: false
@@ -118,6 +143,8 @@ unclassified:
     allPipelines: true
     elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
     systemTimeFormat: "'<b>'HH:mm:ss'</b> '"
+  whitelist:
+    enabled: false
 tool:
   git:
     installations:
@@ -141,5 +168,3 @@ tool:
           - zip:
               subdir: "apache-maven-3.6.3"
               url: "file:/var/jenkins_home/downloads/apache-maven-3.6.3-bin.tar.gz"
-
-

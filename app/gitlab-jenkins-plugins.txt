@@ -1,7 +1,9 @@
+gitlab-api
 pipeline-model-api
 durable-task
 pipeline-stage-step
 credentials-binding
+gitlab-plugin
 ws-cleanup
 git-client
 workflow-durable-task-step
@@ -21,8 +23,10 @@ pipeline-stage-tags-metadata
 email-ext
 okhttp-api
 git-server
+generic-webhook-trigger
 pipeline-model-extensions
 momentjs
+gitlab-oauth
 trilead-api
 mapdb-api
 ace-editor
@@ -44,6 +48,7 @@ pipeline-build-step
 timestamper
 font-awesome-api
 credentials
+gitlab-logo
 ssh-slaves
 github-api
 branch-api
@@ -79,4 +84,3 @@ workflow-step-api
 apache-httpcomponents-client-4-api
 gradle
 pipeline-stage-view
-windows-slaves

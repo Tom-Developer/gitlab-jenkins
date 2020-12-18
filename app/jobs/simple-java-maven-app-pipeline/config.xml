@@ -12,24 +12,24 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.32.0">
-      <projectUrl>https://github.com/Tom-Developer/simple-java-maven-app/</projectUrl>
-      <displayName>Simple Java Maven App</displayName>
-    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+      <gitLabConnection>gitlab.com</gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <org.jenkinsci.plugins.gitlablogo.GitlabLogoProperty plugin="gitlab-logo@1.0.5">
+      <repositoryName>simple-java-maven-app</repositoryName>
+    </org.jenkinsci.plugins.gitlablogo.GitlabLogoProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-      <triggers>
-        <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.32.0">
-          <spec></spec>
-        </com.cloudbees.jenkins.GitHubPushTrigger>
-      </triggers>
+      <triggers/>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.84">
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.4.5">
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.87">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@4.5.0">
       <configVersion>2</configVersion>
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
-          <url>https://github.com/Tom-Developer/simple-java-maven-app</url>
+          <name>origin</name>
+          <url>https://gitlab.com/tom-dev/simple-java-maven-app.git</url>
+          <credentialsId>1bff0162-c849-49d9-a177-91ef533bcedd</credentialsId>
         </hudson.plugins.git.UserRemoteConfig>
       </userRemoteConfigs>
       <branches>
@@ -42,7 +42,7 @@
       <extensions/>
     </scm>
     <scriptPath>jenkins/Jenkinsfile</scriptPath>
-    <lightweight>true</lightweight>
+    <lightweight>false</lightweight>
   </definition>
   <triggers/>
   <disabled>false</disabled>

@@ -1,5 +1,5 @@
-ARG         JENKINS_VER=2.249.3
-FROM        jenkins/jenkins:${JENKINS_VER}-lts AS default
+ARG         JENKINS_VER=2.263.1-lts
+FROM        jenkins/jenkins:${JENKINS_VER} AS default
 
 WORKDIR		/usr/share/jenkins/ref
 USER        root
@@ -12,7 +12,7 @@ RUN         rm /etc/timezone                                            &&\
             /bin/bash -c 'echo -e "LANG=\"C\"\nLC_CTYPE=\"C\"\nLC_TIME=\"C\"" >> /etc/environment'
 
 # install default plugins
-COPY        app/jenkins-jcasc-plugins.txt plugins.txt
+COPY        app/gitlab-jenkins-plugins.txt plugins.txt
 RUN         jenkins-plugin-cli -f plugins.txt
 
 # download tools
@@ -42,7 +42,7 @@ FROM        default AS jcasc-jenkins
 
 # build info
 LABEL       maintainer="tom p."
-ARG         BUILD_VER=azure-2.0
+ARG         BUILD_VER=azure-3.0
 ARG         BUILDPLATFORM
 ENV         BUILD_VERSION=${BUILD_VER}
 ENV         BUILD_PLATFORM=$BUILDPLATFORM
@@ -51,20 +51,25 @@ ENV         BUILD_PLATFORM=$BUILDPLATFORM
 ENV         JAVA_OPTS="-Duser.timezone=America/Toronto \
             -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Toronto \
             -Djenkins.install.runSetupWizard=false \
-            -Dcasc.jenkins.config=/var/jenkins_home/jcasc-config/jenkins-azure-2.0.yaml"
+            -Dcasc.jenkins.config=/var/jenkins_home/jcasc-config/jenkins-azure-3.0.yaml"
 
 ENV         JENKINS_OPTS --sessionTimeout=360
 ENV         JENKINS_JAVA_OPTIONS="-Duser.timezone=America/Toronto \
             -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Toronto"
 
 # copy JCasC configuration file(s)
-COPY        app/jcasc-config  ./jcasc-config
+COPY        app/jcasc-config                ./jcasc-config
 
-# copy sample pipeline job(s) and groovy startup scripts
-COPY        app/jobs                        ./jobs
+# copy helpful bash config files
 COPY        app/bash-config/.bashrc         ./.bashrc
 COPY        app/bash-config/.bash_aliases   ./.bash_aliases
-COPY        app/groovy/*.groovy             ./init.groovy.d/
+
+# copy a sample pipeline job
+COPY        app/jobs                        ./jobs
+COPY        app/fingerprints                ./fingerprints
+
+# copy groovy init scripts if required
+#COPY        app/groovy/*.groovy             ./init.groovy.d/
 
 # Jenkins jetty server listens on this port. Allow outside connections
 EXPOSE      8080
